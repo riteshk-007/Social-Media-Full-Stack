@@ -6,7 +6,7 @@ const Auth = async () => {
 
   if (session) redirect("/");
   return (
-    <div className="w-full h-screen flex items-center justify-center dark:bg-black">
+    <div className="h-screen w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center">
       <Button />
     </div>
   );
