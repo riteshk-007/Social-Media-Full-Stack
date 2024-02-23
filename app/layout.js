@@ -1,3 +1,4 @@
+import { AuthProvider } from "./(pages)/Provider";
 import "./globals.css";
 import { ReduxProvider } from "./Redux/Provider";
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={font.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
