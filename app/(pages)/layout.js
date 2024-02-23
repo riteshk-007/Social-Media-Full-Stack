@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
           {children}
         </div>
         {session?.user && (
-          <div className="hidden md:block md:w-1/4 lg:w-1/4 h-full bg-blue-500 sticky top-0">
+          <div className="hidden md:block md:w-1/4 lg:w-1/4 h-full sticky top-0">
             Column 3
           </div>
         )}
