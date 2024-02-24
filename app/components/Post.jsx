@@ -44,7 +44,7 @@ const Post = ({ img }) => {
   };
 
   return (
-    <div className="w-full md:w-2/3 mx-auto py-3 my-5 px-2 border shadow-md rounded-md flex-col">
+    <div className="w-full lg:w-2/3 mx-auto py-3 my-5 px-2 border shadow-md rounded-md flex-col">
       <div className="w-full flex items-center justify-start">
         <div className=" w-auto mx-2">
           <Image
@@ -53,7 +53,6 @@ const Post = ({ img }) => {
             className="rounded-full shadow-md"
             width={50}
             height={50}
-            lazyloading="true"
           />
         </div>
         <div className="w-full flex items-start justify-center mx-2 flex-col">
@@ -75,6 +74,7 @@ const Post = ({ img }) => {
           className="rounded-md"
           width={550}
           height={500}
+          onDoubleClick={handleLikeClick}
         />
       </div>
       <div className="w-full flex items-center justify-center flex-col">
