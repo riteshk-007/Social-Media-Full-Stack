@@ -6,7 +6,7 @@ const FollowFollowing = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [followerUsers, setFollowerUsers] = useState(
-    Array(500).fill("Follower User")
+    Array(15).fill("Follower User")
   );
   const [followingUsers, setFollowingUsers] = useState(
     Array(10).fill("Following User")

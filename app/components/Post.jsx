@@ -24,6 +24,7 @@ const Post = ({ img }) => {
   };
 
   const handleCommentSubmit = (event) => {
+    if (comment === "") return;
     if (event.key === "Enter") {
       console.log(comment);
       setComment("");
@@ -122,7 +123,7 @@ const Post = ({ img }) => {
               className="w-full p-2 border rounded-md"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              onKeyPress={handleCommentSubmit}
+              onKeyUp={handleCommentSubmit}
             />
           </div>
         )}
