@@ -16,7 +16,7 @@ const SideNav = () => {
   const { data: session } = useSession();
   return (
     <div className="w-full h-full flex items-end justify-evenly md:flex-col  border-gray-200 dark:bg-black dark:text-white border-r-2 md:pr-5 px-2 py-2 shadow-xl">
-      <Link href={"/"}>
+      <Link href={"/"} className="hidden md:block">
         <svg
           id="logo-35"
           width="50"
@@ -45,40 +45,20 @@ const SideNav = () => {
           { href: "/explore", icon: IoSearch, label: "Explore" },
           { href: "/profile", icon: FaUser, label: "Profile" },
         ].map(({ href, icon: Icon, label }) => (
-          <TooltipProvider key={href}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Link href={href}>
-                  <span className="w-full flex items-center justify-center space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-3 rounded-md">
-                    <Icon fontSize={24} />
-                    <span className="hidden md:block font-semibold">
-                      {label}
-                    </span>
-                  </span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {label}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Link key={href} href={href}>
+            <span className="w-full flex items-center justify-center space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-3 rounded-md">
+              <Icon fontSize={22} />
+              <span className="hidden md:block font-semibold">{label}</span>
+            </span>
+          </Link>
         ))}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <div
-                onClick={() => signOut()}
-                className=" flex items-center justify-center space-x-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md"
-              >
-                <LuLogOut fontSize={24} />
-                <span className="hidden md:block font-semibold">Logout</span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Logout</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div
+          onClick={() => signOut()}
+          className=" flex items-center justify-center space-x-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md"
+        >
+          <LuLogOut fontSize={24} />
+          <span className="hidden md:block font-semibold">Logout</span>
+        </div>
       </div>
 
       <TooltipProvider>
@@ -95,7 +75,7 @@ const SideNav = () => {
                 alt="user"
                 className="rounded-full  border-black dark:bg-black dark:text-white dark:border-white"
               />
-              <div className="hidden sm:block">
+              <div className="hidden md:block">
                 <h1 className="text-base font-bold">
                   {session?.user?.name || "/./image.png"}
                 </h1>
