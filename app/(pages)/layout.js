@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
           </div>
         )}
         <div
-          className={`h-screen overflow-auto ${
+          className={`h-screen overflow-auto scrollbar-hide ${
             session?.user ? "md:w-1/2 lg:w-1/2" : "w-full"
           }`}
         >

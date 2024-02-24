@@ -96,7 +96,9 @@ const SideNav = () => {
                 className="rounded-full  border-black dark:bg-black dark:text-white dark:border-white"
               />
               <div className="hidden sm:block">
-                <h1 className="text-base font-bold">{session?.user?.name}</h1>
+                <h1 className="text-base font-bold">
+                  {session?.user?.name || "/./image.png"}
+                </h1>
               </div>
             </Link>
           </TooltipTrigger>

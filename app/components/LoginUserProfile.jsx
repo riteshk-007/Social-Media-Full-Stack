@@ -18,7 +18,7 @@ const LoginUserProfile = () => {
       <div className="flex flex-col items-center relative">
         <div className="relative group">
           <Image
-            src={session?.user?.image}
+            src={session?.user?.image || "/./image.png"}
             alt="user"
             className="rounded-full shadow-md relative"
             width={150}
