@@ -1,14 +1,17 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
   const handleSearch = (event) => {
     if (searchTerm === "") return;
     if (event.key === "Enter") {
       console.log(searchTerm);
+      router.push(`/explore/${searchTerm}`);
     }
   };
 
