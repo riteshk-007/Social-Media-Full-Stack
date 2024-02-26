@@ -17,6 +17,18 @@ export const UserSearch = createAsyncThunk(
     }
   }
 );
+export const userHistory = createAsyncThunk("user/history", async (email) => {
+  try {
+    const res = await axios.post("/api/history", {
+      userEmail: email,
+    });
+    if (res.data.status === 200) {
+      return res.data.data;
+    }
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ message: error.message });
+  }
+});
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -36,6 +48,19 @@ export const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(UserSearch.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(userHistory.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(userHistory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.user = action.payload;
+    });
+    builder.addCase(userHistory.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
