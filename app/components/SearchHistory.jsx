@@ -1,9 +1,11 @@
 "use client";
 import { FiX } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteHistory } from "../Redux/User.Slice";
 
 const SearchHistory = () => {
   const history = useSelector((state) => state?.user);
+  const dispatch = useDispatch();
 
   return (
     <div className="w-full py-5 flex items-center justify-center px-3 border-t-2 flex-col">
@@ -20,9 +22,11 @@ const SearchHistory = () => {
             >
               <p className="text-left text-sm">{item?.search}</p>
               <FiX
-                onClick={() => console.log("delete", item?.id)}
+                onClick={() => {
+                  dispatch(deleteHistory(item?.id));
+                }}
                 fontSize={18}
-                className="cursor-pointer bg-gray-300 text-white rounded-full p-1"
+                className="cursor-pointer bg-gray-300 text-white rounded-full p-1 hover:text-rose-300"
               />
             </div>
           ))
