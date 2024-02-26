@@ -2,8 +2,8 @@ import prisma from "@/DB/db.config";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  const { search, userId } = await req.json();
-  if (!search || !userId)
+  const { search, userEmail } = await req.json();
+  if (!search || !userEmail)
     return NextResponse.json(
       { error: "Invalid search or user id" },
       { status: 400 }
@@ -12,7 +12,7 @@ export const POST = async (req) => {
     await prisma.UserSearchHistory.create({
       data: {
         search,
-        userId,
+        userEmail,
       },
     });
 

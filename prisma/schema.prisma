@@ -23,7 +23,7 @@ model User {
 }
 model UserSearchHistory {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @db.ObjectId
+  userEmail String
   search    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userEmail], references: [email])
 }

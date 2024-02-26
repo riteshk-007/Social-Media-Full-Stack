@@ -2,15 +2,20 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { UserSearch } from "../Redux/User.Slice";
+import { useSession } from "next-auth/react";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
+  const { data: session } = useSession();
   const handleSearch = (event) => {
     if (searchTerm === "") return;
     if (event.key === "Enter") {
-      console.log(searchTerm);
+      dispatch(UserSearch({ term: searchTerm, email: session?.user?.email }));
       router.push(`/explore/${searchTerm}`);
     }
   };
