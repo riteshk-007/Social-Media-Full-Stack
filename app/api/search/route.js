@@ -16,7 +16,7 @@ export const POST = async (req) => {
       },
     });
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findMany({
       where: {
         OR: [
           {
@@ -35,7 +35,7 @@ export const POST = async (req) => {
       },
     });
     if (!user)
-      return NextResponse.json({ error: "No user found" }, { status: 404 });
+      return NextResponse.json({ message: "User not found", status: 404 });
     return NextResponse.json({
       data: user,
       message: "User found",

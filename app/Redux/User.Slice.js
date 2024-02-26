@@ -4,22 +4,23 @@ import axios from "axios";
 export const UserSearch = createAsyncThunk(
   "user/search",
   async (search, thunkAPI) => {
-    console.log("search......", search);
     try {
-      const res = axios.post("/api/search", {
+      const res = await axios.post("/api/search", {
         search: search?.term,
         userEmail: search?.email,
       });
-      return res.data;
+      if (res.data.status === 200) {
+        return res.data.data;
+      }
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return thunkAPI.rejectWithValue({ message: error.message });
     }
   }
 );
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: null,
+    user: [],
     error: null,
     loading: false,
   },
