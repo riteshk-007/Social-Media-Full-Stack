@@ -21,6 +21,7 @@ model User {
   date     DateTime @default(now())
   search   UserSearchHistory[]
    posts  Post[]
+  comments Comment[]
 }
 model UserSearchHistory {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -35,4 +36,14 @@ model Post {
   userEmail String 
   date      DateTime @default(now())
   author User     @relation(fields: [userEmail], references: [email])
+  comments Comment[]
  }
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  date      DateTime @default(now())
+  userEmail String 
+  postId    String    @db.ObjectId
+  author    User     @relation(fields: [userEmail], references: [email])
+  post      Post     @relation(fields: [postId], references: [id])
+}
