@@ -6,12 +6,15 @@ import { useState } from "react";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { CreatePosts } from "../Redux/Post.Slice";
 
 const CreatePost = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -44,6 +47,13 @@ const CreatePost = () => {
 
       console.log("Text:", data.text);
 
+      dispatch(
+        CreatePosts({
+          content: data.text,
+          image: imageUrl,
+          userEmail: session?.user?.email,
+        })
+      );
       setImage(null);
       setValue("text", "");
       setFile(null);
@@ -148,7 +158,7 @@ const CreatePost = () => {
           <Button
             variant="default"
             className="my-2"
-            disabled={errors.text}
+            disabled={errors.text || !image}
             type="submit"
           >
             Post
