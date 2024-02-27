@@ -2,20 +2,55 @@
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
 
 const CreatePost = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const [text, setText] = useState("");
-  const [isPostDisabled, setIsPostDisabled] = useState(true);
+  const [file, setFile] = useState(null);
 
-  useEffect(() => {
-    setIsPostDisabled(!text);
-  }, [image, text]);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      formData.append("upload_preset", "next-cloudinary");
+      const uploadResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/riteshk/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        throw new Error(`HTTP error! status: ${uploadResponse.status}`);
+      }
+
+      const uploadedImageData = await uploadResponse.json();
+      const imageUrl = uploadedImageData.secure_url;
+      console.log(imageUrl);
+
+      console.log("Text:", data.text);
+
+      setImage(null);
+      setValue("text", "");
+      setFile(null);
+    } catch (error) {
+      console.error("An error occurred while uploading the image:", error);
+    }
+  };
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -26,19 +61,8 @@ const CreatePost = () => {
       };
 
       reader.readAsDataURL(e.target.files[0]);
+      setFile(e.target.files[0]);
     }
-  };
-
-  const handleTextChange = (e) => {
-    setText(e.target.value);
-  };
-
-  const handlePostClick = () => {
-    console.log("Image:", image);
-    console.log("Text:", text);
-
-    setImage(null);
-    setText("");
   };
 
   const handleOpen = () => {
@@ -48,11 +72,15 @@ const CreatePost = () => {
   const handleClose = () => {
     setIsOpen(false);
   };
+
   const handleDeleteClick = () => {
     setImage(null);
   };
   return (
-    <div className=" w-full p-4 mt-6 border bg-white shadow-md rounded-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className=" w-full p-4 mt-6 border bg-white shadow-md rounded-md"
+    >
       <div className=" w-full flex items-center justify-between">
         <div className="flex items-center">
           <div className="mr-4">
@@ -113,22 +141,21 @@ const CreatePost = () => {
             )}
           </div>
           <Textarea
+            {...register("text", { required: true })}
             className="mt-4 w-full p-2 rounded-md"
             placeholder="What's on your mind?"
-            value={text}
-            onChange={handleTextChange}
           />
           <Button
             variant="default"
             className="my-2"
-            disabled={isPostDisabled}
-            onClick={handlePostClick}
+            disabled={errors.text}
+            type="submit"
           >
             Post
           </Button>
         </div>
       )}
-    </div>
+    </form>
   );
 };
 

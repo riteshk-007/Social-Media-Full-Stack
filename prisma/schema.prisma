@@ -20,6 +20,7 @@ model User {
   avatar   String?
   date     DateTime @default(now())
   search   UserSearchHistory[]
+   posts  Post[]
 }
 model UserSearchHistory {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -27,3 +28,11 @@ model UserSearchHistory {
   search    String
   user      User     @relation(fields: [userEmail], references: [email])
 }
+model Post {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  image     String?
+  userEmail String 
+  date      DateTime @default(now())
+  author User     @relation(fields: [userEmail], references: [email])
+ }
