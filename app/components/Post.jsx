@@ -1,23 +1,17 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 
-const Post = ({ img }) => {
-  const { data: session } = useSession();
-  const [date, setDate] = useState("");
+const Post = ({ post, user }) => {
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [comment, setComment] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  useEffect(() => {
-    setDate(new Date().toLocaleDateString("en-US"));
-  }, []);
 
   const handleCommentClick = () => {
     setShowCommentBox(!showCommentBox);
@@ -49,7 +43,7 @@ const Post = ({ img }) => {
       <div className="w-full flex items-center justify-start">
         <div className=" w-auto mx-2">
           <Image
-            src={session?.user?.image || "/./image.png"}
+            src={user?.avatar || "/./image.png"}
             alt="user"
             className="rounded-full shadow-md"
             width={50}
@@ -57,20 +51,24 @@ const Post = ({ img }) => {
           />
         </div>
         <div className="w-full flex items-start justify-center mx-2 flex-col">
-          <h1 className="font-bold text-sm">{session?.user?.name}</h1>
-          <p className="text-gray-500 text-xs">date: {date}</p>
+          <h1 className="font-bold text-sm">{user?.name}</h1>
+          <p className="text-gray-500 text-xs">
+            {new Date(post?.date).toLocaleDateString()}{" "}
+            {new Date(post?.date).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
         </div>
       </div>
       <div className="w-full p-1 my-2">
         <p className="text-xs font-semibold text-wrap">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam euismod
-          odio et felis lacinia, non suscipit nunc fermentum. Nam euismod odio
-          et felis lacinia, non suscipit nunc fermentum.
+          {post?.content || "No content"}
         </p>
       </div>
       <div className="w-full flex items-center justify-center my-1">
         <Image
-          src={img}
+          src={post?.image || "/./image.png"}
           alt="user"
           className="rounded-md"
           width={550}

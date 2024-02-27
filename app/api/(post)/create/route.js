@@ -30,3 +30,21 @@ export const POST = async (req) => {
     );
   }
 };
+
+export const GET = async (req) => {
+  try {
+    const posts = await prisma.user.findMany({
+      include: {
+        posts: true,
+      },
+    });
+
+    return NextResponse.json({ data: posts, status: 200 });
+  } catch (error) {
+    console.error("An error occurred while fetching the posts:", error);
+    return NextResponse.json(
+      { message: "An error occurred while fetching the posts" },
+      { status: 500 }
+    );
+  }
+};
