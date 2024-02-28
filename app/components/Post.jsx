@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { createComment } from "../Redux/Comment.Slice";
 
 const Post = ({ post, user }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -12,6 +14,7 @@ const Post = ({ post, user }) => {
   const [comment, setComment] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const dispatch = useDispatch();
 
   const handleCommentClick = () => {
     setShowCommentBox(!showCommentBox);
@@ -20,9 +23,14 @@ const Post = ({ post, user }) => {
   const handleCommentSubmit = (event) => {
     if (comment === "") return;
     if (event.key === "Enter") {
-      console.log("content..", comment);
-      console.log("userEmail..", user?.email);
-      console.log("postId..", post?.id);
+      dispatch(
+        createComment({
+          content: comment,
+          postId: post?.id,
+          userEmail: user?.email,
+        })
+      );
+      setCommentCount(commentCount + 1);
       setComment("");
     }
   };
