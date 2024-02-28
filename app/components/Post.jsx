@@ -20,7 +20,9 @@ const Post = ({ post, user }) => {
   const handleCommentSubmit = (event) => {
     if (comment === "") return;
     if (event.key === "Enter") {
-      console.log(comment);
+      console.log("content..", comment);
+      console.log("userEmail..", user?.email);
+      console.log("postId..", post?.id);
       setComment("");
     }
   };
