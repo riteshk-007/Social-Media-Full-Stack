@@ -30,15 +30,31 @@ export const POST = async (req) => {
     );
   }
 };
-
-export const GET = async (req) => {
+export const GET = async (_) => {
   try {
     const posts = await prisma.user.findMany({
-      include: {
-        posts: true,
+      select: {
+        email: true,
+        id: true,
+        avatar: true,
+        name: true,
+        posts: {
+          select: {
+            id: true,
+            content: true,
+            image: true,
+            date: true,
+            comments: {
+              select: {
+                id: true,
+                content: true,
+                date: true,
+              },
+            },
+          },
+        },
       },
     });
-
     return NextResponse.json({ data: posts, status: 200 });
   } catch (error) {
     console.error("An error occurred while fetching the posts:", error);
