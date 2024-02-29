@@ -4,7 +4,6 @@ import axios from "axios";
 export const createComment = createAsyncThunk(
   "comment/create",
   async (comment, thunkAPI) => {
-    console.log(comment, "comment");
     try {
       const res = await axios.post("/api/post-comment", {
         content: comment?.content,

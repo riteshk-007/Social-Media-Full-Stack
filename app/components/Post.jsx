@@ -6,6 +6,8 @@ import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { createComment } from "../Redux/Comment.Slice";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const Post = ({ post, user }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -14,12 +16,13 @@ const Post = ({ post, user }) => {
   const [comment, setComment] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const dispatch = useDispatch();
+  const { data: session } = useSession();
 
   const handleCommentClick = () => {
     setShowCommentBox(!showCommentBox);
   };
-
   const handleCommentSubmit = (event) => {
     if (comment === "") return;
     if (event.key === "Enter") {
@@ -27,7 +30,7 @@ const Post = ({ post, user }) => {
         createComment({
           content: comment,
           postId: post?.id,
-          userEmail: user?.email,
+          userEmail: session?.user?.email,
         })
       );
       setCommentCount(commentCount + 1);
@@ -47,7 +50,13 @@ const Post = ({ post, user }) => {
   const handleBookmarkClick = () => {
     setBookmarked(!bookmarked);
   };
+  useEffect(() => {
+    setCommentCount(post?.comments?.length);
+  }, [post?.comments]);
 
+  const handleCommentCountClick = () => {
+    setShowComments(!showComments);
+  };
   return (
     <div className="w-full lg:w-2/3 mx-auto py-3 my-5 px-2 border shadow-md rounded-md flex-col">
       <div className="w-full flex items-center justify-start">
@@ -87,9 +96,13 @@ const Post = ({ post, user }) => {
         />
       </div>
       <div className="w-full flex items-center justify-center flex-col">
-        <div className="w-11/12 text-xs flex justify-between items-center mb-2">
+        <div className="w-11/12 text-xs flex justify-between items-center mb-2 cursor-pointer">
           {likeCount > 0 && <span>{likeCount} likes</span>}
-          {commentCount > 0 && <span>{commentCount} comments</span>}
+          {commentCount > 0 && (
+            <span onClick={handleCommentCountClick}>
+              {commentCount} comments
+            </span>
+          )}
         </div>
         <div className="flex justify-around w-full mb-2">
           <div
@@ -135,6 +148,27 @@ const Post = ({ post, user }) => {
             />
           </div>
         )}
+        {showComments &&
+          post?.comments?.map((comment) => (
+            <div
+              key={comment.id}
+              className="w-full flex  flex-col md:flex-row items-center justify-start my-2  p-1 bg-white hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 ease-in-out rounded-md shadow-md"
+            >
+              <div className="w-full flex justify-center space-x-2 items-center mb-2">
+                <h1 className="font-bold text-xs text-gray-600">
+                  {comment?.userEmail}
+                </h1>
+                <p className="text-gray-500 text-[10px]">
+                  {new Date(comment?.date).toLocaleDateString()}{" "}
+                </p>
+              </div>
+              <div className="w-full border p-1 rounded-md px-2">
+                <p className="text-xs font-semibold text-wrap">
+                  {comment?.content || "No content"}
+                </p>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

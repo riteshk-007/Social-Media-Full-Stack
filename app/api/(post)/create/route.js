@@ -49,6 +49,7 @@ export const GET = async (_) => {
                 id: true,
                 content: true,
                 date: true,
+                userEmail: true,
               },
             },
           },
